@@ -172,6 +172,8 @@ gapts outer 10
 ## BORDERS
 set_from_resource $fg i3wm.color7
 set_from_resource $bg i3wm.color2 
+set_from_resource $border i3wm.color1
+set_from_resource $separator i3wm.color3
 
 # class                 border  backgr. text indicator child_border
 client.focused          $bg     $bg     $fg  $bg       $bg
@@ -180,12 +182,9 @@ client.focused          $bg     $bg     $fg  $bg       $bg
 client.urgent           $bg     $bg     $fg  $bg       $bg
 client.placeholder      $bg     $bg     $fg  $bg       $bg
 
-#client.background       $bg
-
 new_window pixel 1
 
 bindsym $mod+r mode "resize"
-
 ## WALLPAPER
 
 exec --no-startup-id wal -R
@@ -193,44 +192,48 @@ exec --no-startup-id wal -R
 # transparcencia
 exec xcompmgr -c -f -n
 
-#demenu
-bindsym $mod+d exec dmenu_run
+#dmenu
+bindsym $mod+d exec ~/.config/dmen.sh
+
+#polybar
+exec --no-startup-id polybar -r mybar
+
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
+#bar {
 	height 25
         position top
-	status_command i3status
+#	status_command i3status
 
 	
     colors {
-        separator #099E4C
+        separator $border
         background #030C07
-        statusline #0CCE6A
+        statusline $fg
    
 	# ative		  #BORDER   #BG	   #TEXT	 
-        focused_workspace #13FFA7 #099E6A #000000
-        active_workspace #13FFA7 #099E6A #000000
-        inactive_workspace #0CCE6A #0CCE6A #000000
+        focused_workspace $border   $bg     $fg
+        active_workspace  $border $separator #000000
+        inactive_workspace  $border $fg $border
         urgent_workspace # #13FFA7 #000000 #000000
     }
 }
 
 # launch picom from i3 config
-
 exec --no-startup-id picom
+# lauch flameshot
+exec --no-startup-id flameshot
 
 # from picom.conf
 
 opacity-rule = [
 
 "80:class_g = 'Terminator'",
-"70:class_g = 'i3-bar' && !_NET_WM_STATE@:32a",
-"80:class_g = 'i3status'"
-
 ];
 
-
+# set wallpaper
+bindsym  $mod+Shift+w exec wal -i ~/.config/wallpapers
 # I3Lock
 bindsym $mod+Control+l exec ~/.config/lock
+
